@@ -1,9 +1,9 @@
 #!/usr/bin/env/python
 import typing
 
-R1 = int(input("Enter R1: "))
-R2 = int(input("Enter R2: "))
-R3 = int(input("Enter R3: "))
+R1 = float(input("Enter R1: "))
+R2 = float(input("Enter R2: "))
+R3 = float(input("Enter R3: "))
 
 print (str(R1) +
 "                   " + str(R2) + 
