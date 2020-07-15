@@ -1,2 +1,2 @@
 # engineering-is-hard
-I'm gonna chuck any dumb math scripts I come up with in here. Use them or don't.
+Dumb math, programming, engineering, and SysAdmin scripts I've come up with over the years. Use them or don't.
