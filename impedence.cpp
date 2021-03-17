@@ -1,5 +1,21 @@
 #include <complex>
 #include <iostream>
+enum class Value { lower, higher };
+// This is for when I'm tired of dealing with Ideal Transformers
+// Get turns ratio, that's simple, then determine to negate or not
+// Chainable too
+std::complex<double> impedence(Value FirstInductor, Value SecondInductor,
+                               double firstNum, double secondNum,
+                               std::complex<double> firstImpedence,
+                               std::complex<double> secondImpedence) {
+  double N = secondNum / firstNum;
+  if (FirstInductor != SecondInductor) {
+    N = -N;
+  }
+  std::complex<double> reflectedImpedence =
+      firstImpedence + (secondImpedence / std::pow(N, 2));
+  return reflectedImpedence;
+}
 std::complex<double> impedence(double w, double R1, double R2, double L1,
                                double L2, double k, std::complex<double> ZL);
 
@@ -10,11 +26,13 @@ constexpr double toMilli(double d) { return d * 1000; }
 constexpr double fromMilli(double d) { return d / 1000; }
 int main() {
   double mult = 40.0 / 15.0;
-    // HOW TO DEAL WITH PARALLEL, PERFORM THE RIGHT SIDE ALONE FROM THE LEFT SIDE
-    // THEN CALCULATE THE PARALLEL RESISTANCE
-    // AFTER THAT WE CAN DETERMINE THE CURRENT THROUGH IT WITH EASE BY VOLTAGE / RESISTANCE THROUGH LOOP
-    // THIS COMMENT IS FOR ANYONE WHO WANTS TO KNOW PARALLELISM
-  std::cout << impedence( )
+  // HOW TO DEAL WITH PARALLEL, PERFORM THE RIGHT SIDE ALONE FROM THE LEFT SIDE
+  // THEN CALCULATE THE PARALLEL RESISTANCE
+  // AFTER THAT WE CAN DETERMINE THE CURRENT THROUGH IT WITH EASE BY VOLTAGE /
+  // RESISTANCE THROUGH LOOP
+  std::cout << impedence(Value::higher, Value::higher, 1, 2,
+                         std::complex<double>(17, 5),
+                         std::complex<double>(12, 2))
             << std::endl;
 }
 
