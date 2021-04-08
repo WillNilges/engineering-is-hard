@@ -94,6 +94,26 @@ double resonance(double w1, double w2)
     return sqrt(w1 * w2);
 }
 std::complex<double> impedence(double w, double R1, double R2, double L1, double L2, double k, std::complex<double> ZL);
+enum class Value
+{
+    lower,
+    higher
+};
+// This is for when I'm tired of dealing with Ideal Transformers
+// Get turns ratio, that's simple, then determine to negate or not
+// Chainable too
+std::complex<double> impedence(Value FirstInductor, Value SecondInductor, double firstNum, double secondNum,
+                               std::complex<double> firstImpedence, std::complex<double> secondImpedence)
+{
+    double N = secondNum / firstNum;
+    if (FirstInductor != SecondInductor)
+    {
+        N = -N;
+    }
+    std::complex<double> reflectedImpedence = firstImpedence + (secondImpedence / std::pow(N, 2));
+    return reflectedImpedence;
+}
+std::complex<double> impedence(double w, double R1, double R2, double L1, double L2, double k, std::complex<double> ZL);
 
 std::complex<double> impedence(std::complex<double> R1, std::complex<double> R2, double L1, double L2, double M,
                                std::complex<double> ZL);
@@ -112,17 +132,12 @@ constexpr double toNano(double d)
 int main()
 {
     double mult = 40.0 / 15.0;
-    double R = 2.0_km;
-    double w1 = from_kilometer(86.0_hz);
-    double w2 = from_kilometer(92.0_hz);
     // HOW TO DEAL WITH PARALLEL, PERFORM THE RIGHT SIDE ALONE FROM THE LEFT SIDE
     // THEN CALCULATE THE PARALLEL RESISTANCE
-    // AFTER THAT WE CAN DETERMINE THE CURRENT THROUGH IT WITH EASE BY VOLTAGE / RESISTANCE THROUGH LOOP
-    // THIS COMMENT IS FOR ANYONE WHO WANTS TO KNOW PARALLELISM
-    double B = bandwidthfromHalf_parallel(w1, w2);
-    double C = capacitancefromBandwidth_parallel(B, R);
-    double L = inductancefromw2_parallel(w2, R, C);
-    std::cout << resonance(w1, w2) / B << std::endl;
+    // AFTER THAT WE CAN DETERMINE THE CURRENT THROUGH IT WITH EASE BY VOLTAGE /
+    // RESISTANCE THROUGH LOOP
+    std::cout << impedence(Value::higher, Value::higher, 1, 2, std::complex<double>(17, 5), std::complex<double>(12, 2))
+              << std::endl;
 }
 
 std::complex<double> primaryImpedence(std::complex<double> R1, double L1)
